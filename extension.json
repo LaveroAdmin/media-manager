@@ -1,0 +1,67 @@
+{
+    "name": "laveroadmin/media-manager",
+    "title": {
+        "en": "Media Manager",
+        "ru": "Медиа менеджер"
+    },
+    "description": {
+        "en": "Visual file and media browser for configured Laravel storage disks.",
+        "ru": "Визуальный файловый менеджер и проводник медиафайлов для дисков хранилища Laravel."
+    },
+    "category": "content",
+    "icon": "icon-file",
+    "version": "1.0.0",
+    "author": {
+        "name": "Aleksandr Kireev",
+        "email": "hello@bespredel.name",
+        "url": "https://bespredel.name"
+    },
+    "github": "https://github.com/LaveroAdmin/media-manager",
+    "setup": {
+        "commands": [
+            {
+                "cmd": "php artisan storage:link",
+                "desc": {
+                    "en": "Create symbolic link for public storage",
+                    "ru": "Создание символической ссылки на публичное хранилище"
+                }
+            },
+            {
+                "cmd": "php artisan admin:import media-manager",
+                "desc": {
+                    "en": "Import media manager menu item",
+                    "ru": "Импорт меню медиа менеджера"
+                }
+            }
+        ],
+        "config": {
+            "file": "config/admin.php",
+            "code": "'media-manager' => [\n    'enable' => true,\n    'disk' => 'public',\n],"
+        },
+        "requirements": {
+            "en": [
+                "PHP >= 8.1"
+            ],
+            "ru": [
+                "PHP >= 8.1"
+            ]
+        },
+        "notes": {
+            "en": [
+                "The 'disk' parameter defines the active disk from config/filesystems.php."
+            ],
+            "ru": [
+                "Параметр 'disk' определяет активный диск из config/filesystems.php."
+            ]
+        }
+    },
+    "key": "media-manager",
+    "compatibility": {
+        "php": ">=8.1",
+        "laravel": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+        "admin": "^1.0",
+        "extensions": [
+            "fileinfo"
+        ]
+    }
+}
