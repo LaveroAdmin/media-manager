@@ -264,5 +264,83 @@
                 });
             });
         }
+
+        // 1-click Copy URL
+        document.querySelectorAll('.btn-copy-url').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var url = this.getAttribute('data-url');
+                if (url && navigator.clipboard) {
+                    navigator.clipboard.writeText(url).then(function() {
+                        admin.toastr.success("{{ __('lavero-admin-media::media.url_copied') }}");
+                    });
+                }
+            });
+        });
+
+        // Drag-and-drop multi-upload
+        var dropzone = document.getElementById('media-dropzone');
+        if (dropzone) {
+            dropzone.addEventListener('click', function() {
+                var input = document.querySelector('.file-upload');
+                if (input) input.click();
+            });
+            ['dragenter', 'dragover'].forEach(function(evt) {
+                dropzone.addEventListener(evt, function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.add('bg-primary', 'bg-opacity-10', 'text-primary');
+                });
+            });
+            ['dragleave', 'drop'].forEach(function(evt) {
+                dropzone.addEventListener(evt, function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary');
+                });
+            });
+            dropzone.addEventListener('drop', function(e) {
+                var files = e.dataTransfer ? e.dataTransfer.files : null;
+                if (!files || !files.length) return;
+                var fd = new FormData();
+                fd.append('dir', '{{ $url['path'] }}');
+                fd.append('_token', '{{ csrf_token() }}');
+                for (var i = 0; i < files.length; i++) {
+                    fd.append('files[]', files[i]);
+                }
+                fetch('{{ $url['upload'] }}', { method: 'POST', body: fd })
+                    .then(function() { admin.ajax.reload(); })
+                    .catch(function() { admin.toastr.error("{{ __('lavero-admin-media::media.error') }}"); });
+            });
+        }
+
+        // Process Image (Resize / WebP)
+        var processModal = document.getElementById('processImageModal');
+        if (processModal) {
+            processModal.addEventListener('show.bs.modal', function(event) {
+                var trigger = event.relatedTarget;
+                var pathInput = document.getElementById('processImagePath');
+                if (trigger && pathInput) {
+                    pathInput.value = trigger.getAttribute('data-path') || '';
+                }
+            });
+        }
+        var processForm = document.getElementById('process-image-form');
+        if (processForm) {
+            processForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var fd = new FormData(processForm);
+                admin.ajax.post('{{ route("media-process-image") }}', {
+                    path: fd.get('path'),
+                    width: fd.get('width') || 0,
+                    height: fd.get('height') || 0,
+                    webp: document.getElementById('processImageWebp').checked ? 1 : 0,
+                }, function(result) {
+                    var modalInstance = bootstrap.Modal.getInstance(processModal);
+                    if (modalInstance) modalInstance.hide();
+                    defaultMediaMangerResponse(result);
+                });
+            });
+        }
     })();
 </script>

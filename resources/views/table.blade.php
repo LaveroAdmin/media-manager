@@ -54,7 +54,11 @@
                                 <a class="btn btn-sm btn-light file-delete text-danger" data-path="{{ $item['name'] }}" title="{{ __('lavero-admin-media::media.delete') }}"><i class="icon-trash"></i></a>
                                 @unless($item['isDir'])
                                     <a target="_blank" href="{{ $item['download'] }}" class="btn btn-sm btn-light" title="{{ __('lavero-admin-media::media.download') }}"><i class="icon-download"></i></a>
+                                    @if(preg_match('/\.(jpe?g|png|gif|webp)$/i', $item['name']))
+                                        <a class="btn btn-sm btn-light btn-process-image" data-bs-toggle="modal" data-bs-target="#processImageModal" data-path="{{ $item['name'] }}" title="{{ __('lavero-admin-media::media.process_image') }}"><i class="icon-magic text-info"></i></a>
+                                    @endif
                                 @endunless
+                                <a class="btn btn-sm btn-light btn-copy-url" data-url="{{ $item['url'] }}" title="{{ __('lavero-admin-media::media.copy_url') }}"><i class="icon-copy"></i></a>
                                 <a class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#urlModal" data-url="{{ $item['url'] }}" title="{{ __('lavero-admin-media::media.url') }}"><i class="icon-link"></i></a>
                             </div>
                         </td>

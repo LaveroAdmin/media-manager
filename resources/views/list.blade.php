@@ -44,8 +44,12 @@
                                 <li><a href="#" class="dropdown-item file-delete text-danger" data-path="{{ $item['name'] }}"><i class="icon-trash me-1"></i> {{ __('lavero-admin-media::media.delete') }}</a></li>
                                 @unless($item['isDir'])
                                 <li><a target="_blank" class="dropdown-item" href="{{ $item['download'] }}"><i class="icon-download me-1"></i> {{ __('lavero-admin-media::media.download') }}</a></li>
+                                @if(preg_match('/\.(jpe?g|png|gif|webp)$/i', $item['name']))
+                                <li><a href="#" class="dropdown-item btn-process-image" data-bs-toggle="modal" data-bs-target="#processImageModal" data-path="{{ $item['name'] }}"><i class="icon-magic me-1 text-info"></i> {{ __('lavero-admin-media::media.process_image') }}</a></li>
+                                @endif
                                 @endunless
                                 <li class="dropdown-divider"></li>
+                                <li><a href="#" class="dropdown-item btn-copy-url" data-url="{{ $item['url'] }}"><i class="icon-copy me-1"></i> {{ __('lavero-admin-media::media.copy_url') }}</a></li>
                                 <li><a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#urlModal" data-url="{{ $item['url'] }}"><i class="icon-link me-1"></i> {{ __('lavero-admin-media::media.url') }}</a></li>
                             </ul>
                         </div>

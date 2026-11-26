@@ -31,6 +31,40 @@
     </div>
 </div>
 
+<div class="modal fade" id="processImageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow border-0" style="border-radius: 12px;">
+            <div class="modal-header border-bottom py-3 px-4 bg-light">
+                <h5 class="modal-title fw-bold text-dark mb-0">{{ __('lavero-admin-media::media.process_image') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('admin.close') }}"></button>
+            </div>
+            <form id="process-image-form">
+                <div class="modal-body p-4">
+                    <input type="hidden" name="path" id="processImagePath">
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-bold">{{ __('lavero-admin-media::media.max_width') }}</label>
+                            <input type="number" min="0" class="form-control" name="width" placeholder="1920">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-bold">{{ __('lavero-admin-media::media.max_height') }}</label>
+                            <input type="number" min="0" class="form-control" name="height" placeholder="1080">
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="webp" value="1" id="processImageWebp" checked>
+                        <label class="form-check-label" for="processImageWebp">{{ __('lavero-admin-media::media.convert_webp') }}</label>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-2 px-4 bg-light">
+                    <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">{{ __('admin.close') }}</button>
+                    <button type="submit" class="btn btn-primary btn-sm px-3">{{ __('admin.submit') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="urlModal" tabindex="-1" role="dialog" aria-labelledby="urlModalLabel">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content shadow border-0" style="border-radius: 12px;">
@@ -68,6 +102,40 @@
                     </div>
                     <input type="hidden" name="dir" value="{{ $url['path'] }}"/>
                     {{ csrf_field() }}
+                </div>
+                <div class="modal-footer border-top py-2 px-4 bg-light">
+                    <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">{{ __('admin.close') }}</button>
+                    <button type="submit" class="btn btn-primary btn-sm px-3">{{ __('admin.submit') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="processImageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow border-0" style="border-radius: 12px;">
+            <div class="modal-header border-bottom py-3 px-4 bg-light">
+                <h5 class="modal-title fw-bold text-dark mb-0">{{ __('lavero-admin-media::media.process_image') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('admin.close') }}"></button>
+            </div>
+            <form id="process-image-form">
+                <div class="modal-body p-4">
+                    <input type="hidden" name="path" id="processImagePath">
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-bold">{{ __('lavero-admin-media::media.max_width') }}</label>
+                            <input type="number" min="0" class="form-control" name="width" placeholder="1920">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-bold">{{ __('lavero-admin-media::media.max_height') }}</label>
+                            <input type="number" min="0" class="form-control" name="height" placeholder="1080">
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="webp" value="1" id="processImageWebp" checked>
+                        <label class="form-check-label" for="processImageWebp">{{ __('lavero-admin-media::media.convert_webp') }}</label>
+                    </div>
                 </div>
                 <div class="modal-footer border-top py-2 px-4 bg-light">
                     <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">{{ __('admin.close') }}</button>

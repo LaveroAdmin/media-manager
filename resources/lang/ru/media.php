@@ -28,4 +28,12 @@ return [
     'only_local_storage'      => '[laveroadmin/media-manager] поддерживает только локальное хранилище.',
     'empty_folder'            => 'Папка пуста',
     'not_exists'              => 'Файл или директория [:path] не существует',
+    'copy_url'                => 'Копировать URL',
+    'url_copied'              => 'URL скопирован в буфер обмена!',
+    'drop_files_here'         => 'Перетащите файлы сюда для быстрой загрузки в текущую папку',
+    'process_image'           => 'Ресайз / Конвертация в WebP',
+    'max_width'               => 'Макс. ширина (px)',
+    'max_height'              => 'Макс. высота (px)',
+    'convert_webp'            => 'Конвертировать в WebP',
+    'image_processed'         => 'Изображение сохранено как :path',
 ];

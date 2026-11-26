@@ -360,4 +360,110 @@ class MediaManager extends Extension
 
         return date('Y-m-d H:i:s', $time);
     }
+
+    /**
+     * Resize and/or convert an image to WebP using Intervention Image or GD fallback.
+     *
+     * @param int $maxWidth
+     * @param int $maxHeight
+     * @param bool $toWebp
+     * @return string Relative path of resulting file
+     */
+    public function processImage(int $maxWidth = 0, int $maxHeight = 0, bool $toWebp = false): string
+    {
+        if ($this->detectFileType($this->path) !== 'image') {
+            throw new \InvalidArgumentException('Selected file is not a supported image.');
+        }
+
+        $sourceFull = $this->getFullPath($this->path);
+        if (!is_file($sourceFull)) {
+            throw new \RuntimeException(trans('lavero-admin-media::media.not_exists', ['path' => $this->path]));
+        }
+
+        $ext = strtolower(pathinfo($this->path, PATHINFO_EXTENSION));
+        $targetRelative = ($toWebp && $ext !== 'webp')
+            ? preg_replace('/\.[^.]+$/', '.webp', $this->path)
+            : $this->path;
+        $targetFull = $this->getFullPath($targetRelative);
+
+        // Try Intervention Image v3/v4 if available
+        if (class_exists(\Intervention\Image\ImageManager::class)) {
+            try {
+                $manager = \Intervention\Image\ImageManager::gd();
+                $image = $manager->read($sourceFull);
+                if ($maxWidth > 0 || $maxHeight > 0) {
+                    $image->scaleDown(
+                        width: $maxWidth > 0 ? $maxWidth : null,
+                        height: $maxHeight > 0 ? $maxHeight : null
+                    );
+                }
+                if ($toWebp) {
+                    $image->toWebp(85)->save($targetFull);
+                } else {
+                    $image->save($targetFull);
+                }
+
+                return $targetRelative;
+            } catch (\Throwable) {
+                // Fall through to native GD
+            }
+        }
+
+        if (!function_exists('imagecreatefromstring')) {
+            throw new \RuntimeException('PHP GD extension is required for image processing.');
+        }
+
+        $raw = file_get_contents($sourceFull);
+        $img = $raw !== false ? @imagecreatefromstring($raw) : false;
+        if ($img === false) {
+            throw new \RuntimeException('Unable to decode image.');
+        }
+
+        try {
+            $origW = imagesx($img);
+            $origH = imagesy($img);
+            $newW = $origW;
+            $newH = $origH;
+
+            if ($maxWidth > 0 && $newW > $maxWidth) {
+                $newH = (int) round($newH * ($maxWidth / $newW));
+                $newW = $maxWidth;
+            }
+            if ($maxHeight > 0 && $newH > $maxHeight) {
+                $newW = (int) round($newW * ($maxHeight / $newH));
+                $newH = $maxHeight;
+            }
+
+            if ($newW !== $origW || $newH !== $origH) {
+                $resized = imagescale($img, max(1, $newW), max(1, $newH));
+                if ($resized !== false) {
+                    imagedestroy($img);
+                    $img = $resized;
+                }
+            }
+
+            imagepalettetotruecolor($img);
+            imagealphablending($img, true);
+            imagesavealpha($img, true);
+
+            if ($toWebp) {
+                if (!function_exists('imagewebp')) {
+                    throw new \RuntimeException('GD WebP support is not enabled on this server.');
+                }
+                imagewebp($img, $targetFull, 85);
+            } elseif ($ext === 'png') {
+                imagepng($img, $targetFull, 6);
+            } elseif ($ext === 'gif') {
+                imagegif($img, $targetFull);
+            } elseif ($ext === 'webp' && function_exists('imagewebp')) {
+                imagewebp($img, $targetFull, 85);
+            } else {
+                imagejpeg($img, $targetFull, 88);
+            }
+        } finally {
+            imagedestroy($img);
+        }
+
+        return $targetRelative;
+    }
 }

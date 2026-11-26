@@ -87,3 +87,6 @@
             </div>
 
             <div class="card-body p-0">
+                <div id="media-dropzone" class="border-bottom bg-light bg-opacity-50 text-center py-2 px-3 small text-muted" style="border-style: dashed !important; cursor: pointer;">
+                    <i class="icon-cloud-upload-alt me-1 text-primary"></i> {{ __('lavero-admin-media::media.drop_files_here') }}
+                </div>

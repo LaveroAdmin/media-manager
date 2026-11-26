@@ -31,6 +31,7 @@ trait BootExtension
             $router->put('media/move', 'LaveroAdmin\Admin\Media\MediaController@move')->name('media-move');
             $router->post('media/upload', 'LaveroAdmin\Admin\Media\MediaController@upload')->name('media-upload');
             $router->post('media/folder', 'LaveroAdmin\Admin\Media\MediaController@newFolder')->name('media-new-folder');
+            $router->post('media/process-image', 'LaveroAdmin\Admin\Media\MediaController@processImage')->name('media-process-image');
         });
     }
 

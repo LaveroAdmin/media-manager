@@ -28,4 +28,12 @@ return [
     'only_local_storage'      => '[laveroadmin/media-manager] only works for local storage.',
     'empty_folder'            => 'Folder is empty',
     'not_exists'              => 'File or directory [:path] not exists',
+    'copy_url'                => 'Copy URL',
+    'url_copied'              => 'URL copied to clipboard!',
+    'drop_files_here'         => 'Drop files here to upload to current folder',
+    'process_image'           => 'Resize / Convert to WebP',
+    'max_width'               => 'Max Width (px)',
+    'max_height'              => 'Max Height (px)',
+    'convert_webp'            => 'Convert to WebP',
+    'image_processed'         => 'Image saved as :path',
 ];

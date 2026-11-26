@@ -128,4 +128,27 @@ class MediaController extends Controller
             ]);
         }
     }
+
+    public function processImage(Request $request)
+    {
+        $path = (string) $request->input('path');
+        $width = max(0, (int) $request->input('width', 0));
+        $height = max(0, (int) $request->input('height', 0));
+        $toWebp = filter_var($request->input('webp', false), FILTER_VALIDATE_BOOLEAN);
+
+        try {
+            $manager = new MediaManager($path);
+            $resultPath = $manager->processImage($width, $height, $toWebp);
+
+            return response()->json([
+                'status'  => true,
+                'message' => __('lavero-admin-media::media.image_processed', ['path' => basename($resultPath)]),
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
 }
